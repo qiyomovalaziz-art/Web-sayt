@@ -3,16 +3,318 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>NotCoin Clicker</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Kirupto — Fantastik Kripto Bot</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #000;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Yulduzlar */
+    #stars {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle var(--duration, 4s) infinite ease-in-out;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 1; }
+    }
+
+    /* Galaktika */
+    #galaxy {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 800px;
+      height: 800px;
+      border-radius: 50%;
+      background: radial-gradient(circle, transparent 40%, rgba(0, 255, 100, 0.03) 100%);
+      box-shadow: inset 0 0 100px #00ff44;
+      animation: rotateGalaxy 90s linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes rotateGalaxy {
+      from { transform: translate(-50%, -50%) rotate(0deg); }
+      to { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    /* Kapalaklar */
+    #butterfly-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .butterfly {
+      position: absolute;
+      width: 36px;
+      height: 36px;
+      opacity: 0.95;
+      filter: drop-shadow(0 0 8px #00ff88);
+    }
+
+    /* Asosiy interfeys */
+    .container {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    #prompt {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      color: #aaffcc;
+      text-shadow: 0 0 15px #00ffaa;
+      opacity: 1;
+      transition: opacity 0.5s;
+    }
+
+    #nameInput {
+      padding: 16px 28px;
+      font-size: 1.3rem;
+      border: none;
+      border-radius: 50px;
+      outline: none;
+      background: rgba(0, 10, 5, 0.5);
+      color: white;
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(0, 255, 150, 0.6);
+      width: 300px;
+      text-align: center;
+      margin-bottom: 30px;
+      box-shadow: 0 0 25px rgba(0, 255, 150, 0.2);
+      caret-color: #00ff88;
+    }
+
+    #welcomeMessage {
+      font-size: 1.9rem;
+      font-weight: bold;
+      margin-top: 20px;
+      opacity: 0;
+      line-height: 1.4;
+    }
+
+    #timeInfo, #signature {
+      margin-top: 18px;
+      font-size: 1.15rem;
+      opacity: 0;
+    }
+
+    #timeInfo {
+      color: #66ffcc;
+    }
+
+    #signature {
+      color: #aaffaa;
+      font-style: italic;
+      letter-spacing: 1px;
+    }
+
+    /* Animatsiyalar */
+    .cosmic-text {
+      animation: cosmicEnter 2s forwards;
+    }
+
+    @keyframes cosmicEnter {
+      0% {
+        opacity: 0;
+        transform: scale(0.5) rotate(-10deg);
+        filter: blur(10px);
+      }
+      70% {
+        transform: scale(1.1) rotate(2deg);
+        filter: blur(0) drop-shadow(0 0 20px #00ffaa);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) rotate(0);
+        filter: drop-shadow(0 0 25px #00ff88);
+      }
+    }
+
+    .time-reveal {
+      animation: timeReveal 1.2s 1.4s forwards;
+    }
+
+    .signature-reveal {
+      animation: signatureReveal 1.2s 2.2s forwards;
+    }
+
+    @keyframes timeReveal {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+        filter: blur(4px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+        filter: drop-shadow(0 0 8px #66ffaa);
+      }
+    }
+
+    @keyframes signatureReveal {
+      0% {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+        filter: blur(3px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: drop-shadow(0 0 10px #00ff88);
+      }
+    }
+  </style>
 </head>
 <body>
+
+  <div id="stars"></div>
+  <div id="galaxy"></div>
+  <div id="butterfly-container"></div>
+
   <div class="container">
-    <h1 id="score">0</h1>
-    <div id="coin" class="coin">🪙</div>
-    <p class="info">Tugmani bosing — tangalar yig'iling!</p>
+    <div id="prompt">Ismingizni kiriting:</div>
+    <input type="text" id="nameInput" placeholder="Masalan: Ali" maxlength="20" autocomplete="off" />
+    <div id="welcomeMessage"></div>
+    <div id="timeInfo"></div>
+    <div id="signature"></div>
   </div>
 
-  <script src="script.js"></script>
+  <script>
+    // Yulduzlar
+    const starsContainer = document.getElementById('stars');
+    for (let i = 0; i < 200; i++) {
+      const star = document.createElement('div');
+      star.classList.add('star');
+      star.style.left = `${Math.random() * 100}%`;
+      star.style.top = `${Math.random() * 100}%`;
+      star.style.width = `${Math.random() * 3}px`;
+      star.style.height = star.style.width;
+      star.style.setProperty('--duration', `${3 + Math.random() * 5}s`);
+      starsContainer.appendChild(star);
+    }
+
+    // Kapalaklar
+    const butterflySVG = `
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#00ff88" stop-opacity="1"/>
+            <stop offset="100%" stop-color="#00ff88" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <path d="M50,40 Q30,20 35,5 Q45,-10 60,5 Q65,20 50,40Z" fill="url(#glow)" opacity="0.9"/>
+        <path d="M50,40 Q70,20 65,5 Q55,-10 40,5 Q35,20 50,40Z" fill="url(#glow)" opacity="0.9"/>
+        <circle cx="50" cy="40" r="3" fill="#002200"/>
+      </svg>
+    `;
+
+    const bfContainer = document.getElementById('butterfly-container');
+    for (let i = 0; i < 12; i++) {
+      const bf = document.createElement('div');
+      bf.className = 'butterfly';
+      bf.innerHTML = butterflySVG;
+      const startX = Math.random() * window.innerWidth;
+      const startY = window.innerHeight + 50;
+      bf.style.left = `${startX}px`;
+      bf.style.top = `${startY}px`;
+      bfContainer.appendChild(bf);
+
+      // Yorug'lik izi
+      const trail = document.createElement('div');
+      trail.style.position = 'absolute';
+      trail.style.width = '40px';
+      trail.style.height = '40px';
+      trail.style.background = 'radial-gradient(circle, rgba(0,255,136,0.4), transparent 70%)';
+      trail.style.borderRadius = '50%';
+      trail.style.left = `${startX - 20}px`;
+      trail.style.top = `${startY - 20}px`;
+      trail.style.zIndex = '0';
+      trail.style.pointerEvents = 'none';
+      bfContainer.appendChild(trail);
+
+      const duration = 12 + Math.random() * 15;
+      const endX = startX + (Math.random() - 0.5) * 300;
+      const endY = -100;
+
+      bf.animate([
+        { transform: 'translate(0,0)', opacity: 0 },
+        { opacity: 1, offset: 0.1 },
+        { transform: `translate(${endX - startX}px, ${endY - startY}px)`, opacity: 1 },
+        { opacity: 0, offset: 0.95 }
+      ], { duration: duration * 1000, easing: 'cubic-bezier(0.2, 0.9, 0.3, 1)', iterations: Infinity });
+
+      trail.animate([
+        { opacity: 0, transform: 'scale(0.2)' },
+        { opacity: 0.6, transform: 'scale(1)', offset: 0.3 },
+        { opacity: 0, transform: 'scale(1.5)' }
+      ], { duration: duration * 1000, easing: 'ease-out', iterations: Infinity });
+    }
+
+    // Ism kiritish logikasi
+    const nameInput = document.getElementById('nameInput');
+    const prompt = document.getElementById('prompt');
+    const welcomeMessage = document.getElementById('welcomeMessage');
+    const timeInfo = document.getElementById('timeInfo');
+    const signature = document.getElementById('signature');
+
+    nameInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        const name = nameInput.value.trim();
+        if (name) {
+          prompt.style.opacity = '0';
+          nameInput.style.display = 'none';
+
+          welcomeMessage.innerHTML = `✨ <span style="color:#00ffcc">${name}</span>, <strong style="color:#00ff88; text-shadow:0 0 15px #00ffaa">Kirupto</strong> valyuta sotib olish va sotish botiga xush kelibsiz!`;
+          welcomeMessage.classList.add('cosmic-text');
+
+          setTimeout(() => {
+            timeInfo.innerHTML = '🕒 <strong>Bizning ish vaqtimiz: 08:00 – 22:00</strong>';
+            timeInfo.classList.add('time-reveal');
+          }, 1400);
+
+          setTimeout(() => {
+            signature.innerHTML = '— Hurmat bilan, bot egasi <strong>Azizbek</strong>';
+            signature.classList.add('signature-reveal');
+          }, 2200);
+        }
+      }
+    });
+  </script>
 </body>
 </html>
