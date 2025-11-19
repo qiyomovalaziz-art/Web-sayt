@@ -3,60 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Salom Sayt</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: black;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      font-family: Arial, sans-serif;
-    }
-
-    #startButton {
-      padding: 15px 30px;
-      font-size: 24px;
-      background-color: red;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-
-    #startButton:hover {
-      transform: scale(1.05);
-    }
-
-    #greeting {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0);
-      font-size: 48px;
-      color: white;
-      opacity: 0;
-      pointer-events: none;
-    }
-  </style>
+  <title>NotCoin Clicker</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <button id="startButton">Boshlash</button>
-  <div id="greeting">Assalomu alaykum!</div>
+  <div class="container">
+    <h1 id="score">0</h1>
+    <div id="coin" class="coin">🪙</div>
+    <p class="info">Tugmani bosing — tangalar yig'iling!</p>
+  </div>
 
-  <script>
-    document.getElementById('startButton').addEventListener('click', function() {
-      // Tugmani yashirish
-      this.style.display = 'none';
-
-      const greeting = document.getElementById('greeting');
-      // Animatsiya
-      greeting.style.transition = 'transform 0.8s ease-out, opacity 0.8s ease-out';
-      greeting.style.transform = 'translate(-50%, -50%) scale(1)';
-      greeting.style.opacity = '1';
-    });
-  </script>
+  <script src="script.js"></script>
 </body>
+</html>
